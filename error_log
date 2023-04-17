@@ -1,0 +1,31 @@
+[22-Feb-2023 02:12:04 UTC] PHP Warning:  require(/home/wlguerongmarin/public_html/etec-api/vendor/autoload.php): Failed to open stream: No such file or directory in /home/wlguerongmarin/public_html/etec-api/artisan on line 18
+[22-Feb-2023 02:12:04 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/wlguerongmarin/public_html/etec-api/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php80/root/usr/share/pear') in /home/wlguerongmarin/public_html/etec-api/artisan:18
+Stack trace:
+#0 {main}
+  thrown in /home/wlguerongmarin/public_html/etec-api/artisan on line 18
+[22-Feb-2023 02:12:19 UTC] PHP Warning:  require(/home/wlguerongmarin/public_html/etec-api/vendor/autoload.php): Failed to open stream: No such file or directory in /home/wlguerongmarin/public_html/etec-api/artisan on line 18
+[22-Feb-2023 02:12:19 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/wlguerongmarin/public_html/etec-api/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php80/root/usr/share/pear') in /home/wlguerongmarin/public_html/etec-api/artisan:18
+Stack trace:
+#0 {main}
+  thrown in /home/wlguerongmarin/public_html/etec-api/artisan on line 18
+[23-Mar-2023 15:26:43 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home/kroitxyz/public_html/backend/vendor/composer/platform_check.php on line 24
+[23-Mar-2023 15:27:13 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home/kroitxyz/public_html/backend/vendor/psr/log/src/LoggerInterface.php on line 30
+[23-Mar-2023 15:27:13 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[23-Mar-2023 15:27:13 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home/kroitxyz/public_html/backend/vendor/psr/log/src/LoggerInterface.php on line 30
+[23-Mar-2023 15:27:13 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[23-Mar-2023 15:27:18 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home/kroitxyz/public_html/backend/vendor/psr/log/src/LoggerInterface.php on line 30
+[23-Mar-2023 15:27:18 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[23-Mar-2023 15:27:18 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home/kroitxyz/public_html/backend/vendor/psr/log/src/LoggerInterface.php on line 30
+[23-Mar-2023 15:27:18 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[23-Mar-2023 15:27:29 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home/kroitxyz/public_html/backend/vendor/psr/log/src/LoggerInterface.php on line 30
+[23-Mar-2023 15:27:29 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[23-Mar-2023 15:27:29 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home/kroitxyz/public_html/backend/vendor/psr/log/src/LoggerInterface.php on line 30
+[23-Mar-2023 15:27:29 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[23-Mar-2023 15:28:11 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home/kroitxyz/public_html/backend/vendor/psr/log/src/LoggerInterface.php on line 30
+[23-Mar-2023 15:28:11 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[23-Mar-2023 15:28:11 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home/kroitxyz/public_html/backend/vendor/psr/log/src/LoggerInterface.php on line 30
+[23-Mar-2023 15:28:11 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[23-Mar-2023 15:28:27 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home/kroitxyz/public_html/backend/vendor/psr/log/src/LoggerInterface.php on line 30
+[23-Mar-2023 15:28:27 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[23-Mar-2023 15:28:27 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home/kroitxyz/public_html/backend/vendor/psr/log/src/LoggerInterface.php on line 30
+[23-Mar-2023 15:28:27 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
