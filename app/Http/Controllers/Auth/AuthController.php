@@ -23,7 +23,7 @@ class AuthController extends Controller
     {
         if($request['social']==true){
             $Validator = Validator::make($request->all(), [
-                'email' => 'required|email|unique:users',
+                'email' => 'required|email',
                 'uid' => 'required'
             ]);
         }else{
@@ -41,12 +41,18 @@ class AuthController extends Controller
         }
 
         if($request['social']==true){
-
+            $register = User::create([
+                'fname' => $request->fname,
+                'lname' => $request->lname,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password)
+            ]);
         }else{
             $register = User::create([
                 'fname' => $request->fname,
                 'lname' => $request->lname,
-                'username' => $request->name,
+                'username' => $request->username,
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
             ]);
