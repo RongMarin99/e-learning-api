@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Mail\SendMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Contracts\Providers\Auth;
 
 class AuthController extends Controller
@@ -23,7 +27,6 @@ class AuthController extends Controller
     {
         if($request['social']==true){
             $Validator = Validator::make($request->all(), [
-                'email' => 'required|email',
                 'uid' => 'required'
             ]);
         }else{
@@ -35,19 +38,27 @@ class AuthController extends Controller
 
         if($Validator->fails()){
             return response()->json([
-                'message' => 'Register Fails.',
-                'error' => $Validator->errors()
+                'message' => "Register Fail",
+                'error' => $Validator->errors(),
             ]);
         }
 
         if($request['social']==true){
-            $register = User::create([
-                'fname' => $request->fname,
-                'lname' => $request->lname,
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password)
-            ]);
+            $uid = User::where('uid',$request['uid'])->get();
+            if(count($uid)>0){
+                return response()->json([
+                    'message' => false,
+                ]);
+            }else{
+                $register = User::create([
+                    'fname' => $request->fname,
+                    'lname' => $request->lname,
+                    'uid' => $request->uid,
+                    'photo' =>$request->photo,
+                    'username' => $request->username,
+                    'email' => $request->email
+                ]);
+            }
         }else{
             $register = User::create([
                 'fname' => $request->fname,
@@ -56,6 +67,11 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
             ]);
+            $testMailData = [
+                'title' => 'Test Email From AllPHPTricks.com',
+                'body' => 'This is the body of test email.'
+            ];
+            Mail::to('rongmarin98@gmail.com')->send(new SendMail($testMailData));
         }
         return response()->json([
             'message' => 'Register Successfully.',

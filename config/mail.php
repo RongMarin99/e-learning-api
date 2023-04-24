@@ -12,7 +12,7 @@ return [
     | and used as needed; however, this mailer will be used by default.
     |
     */
-
+    'from' => ['address' => 'rongmarin98@gmail.com', 'name' => 'Rong Marin'],
     'default' => env('MAIL_MAILER', 'smtp'),
 
     /*
