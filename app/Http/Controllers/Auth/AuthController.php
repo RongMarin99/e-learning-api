@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Mail\SendMail;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -44,7 +45,9 @@ class AuthController extends Controller
         }
 
         if($request['social']==true){
-            $uid = User::where('uid',$request['uid'])->get();
+            $uid = User::where('uid',$request['uid'])
+                        ->orWhere('email',$request['email'])
+                        ->get();
             if(count($uid)>0){
                 return response()->json([
                     'message' => false,
@@ -58,6 +61,12 @@ class AuthController extends Controller
                     'username' => $request->username,
                     'email' => $request->email
                 ]);
+                $user = [
+                    'user_id' => $register->id,
+                    'username' => $register->username,
+                    'email' => $register->email
+                ];
+                $this->html_email($user);
             }
         }else{
             $register = User::create([
@@ -67,11 +76,12 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
             ]);
-            $testMailData = [
-                'title' => 'Test Email From AllPHPTricks.com',
-                'body' => 'This is the body of test email.'
+            $user = [
+                'user_id' => $register->id,
+                'username' => $register->username,
+                'email' => $register->email
             ];
-            Mail::to('rongmarin98@gmail.com')->send(new SendMail($testMailData));
+            $this->html_email($user);
         }
         return response()->json([
             'message' => 'Register Successfully.',
@@ -159,6 +169,26 @@ class AuthController extends Controller
         auth()->logout();
         return response()->json([
             'message' => 'Logout Successfully.'
+        ]);
+    }
+
+    public function verifyAccount($id)
+    {
+        $user = User::where('id', $id)->first();
+  
+        $message = 'Sorry your email cannot be identified.';
+  
+        if(!is_null($user) ){
+            if(is_null($user->email_verified_at)) {
+                $user->email_verified_at = Carbon::now();
+                $user->save();
+                $message = "Your e-mail is verified. You can now login.";
+            } else {
+                $message = "Your e-mail is already verified. You can now login.";
+            }
+        }
+        return view("emails.confirm",[
+            'message' => $message
         ]);
     }
 }

@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Support\Facades\Mail;
+
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
@@ -45,4 +47,39 @@ class Controller extends BaseController
         $data = file_get_contents($path);
         return 'data:image/' . $type . ';base64,' . base64_encode($data);
     }
+
+    public function basic_email() {
+        $data = array('name'=>"Rong Marin");
+     
+        Mail::send(['text'=>'emails.verification'], $data, function($message) {
+           $message->to('rongmarin98@gmail.com', 'Tutorials Point')
+                    ->subject('Laravel Basic Testing Mail');
+           $message->from('rongmarin98@gmail.com','Rong Marin');
+        });
+        echo "Basic Email Sent. Check your inbox.";
+     }
+     public function html_email($user) {
+        $data = array( 
+            'name' => $user['username'],
+            'email' => $user['email'],
+            'user_id' => $user['user_id']
+        );
+        Mail::send('emails.verification', $data, function($message) use ($user)  {
+           $message->to($user['email'], $user['username'])
+                    ->subject('Welcome to RDev! Confirm Your E-mail.');
+           $message->from(env('MAIL_FROM_ADDRESS'),env('MAIL_USERNAME'));
+        });
+        echo "HTML Email Sent. Check your inbox.";
+     }
+     public function attachment_email() {
+        $data = array('name'=>"Virat Gandhi");
+        Mail::send('mail', $data, function($message) {
+           $message->to('abc@gmail.com', 'Tutorials Point')->subject
+              ('Laravel Testing Mail with Attachment');
+           $message->attach('C:\laravel-master\laravel\public\uploads\image.png');
+           $message->attach('C:\laravel-master\laravel\public\uploads\test.txt');
+           $message->from('xyz@gmail.com','Virat Gandhi');
+        });
+        echo "Email Sent with attachment. Check your inbox.";
+     }
 }

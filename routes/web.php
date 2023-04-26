@@ -17,4 +17,4 @@ use App\Http\Controllers\Auth\AuthController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('user/verify', [AuthController::class, 'verifyEmail'])->name('mail.verify');
+Route::get('account/verify/{id}', [AuthController::class, 'verifyAccount'])->name('user.verify'); 

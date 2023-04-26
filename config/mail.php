@@ -12,7 +12,7 @@ return [
     | and used as needed; however, this mailer will be used by default.
     |
     */
-    'from' => ['address' => 'rongmarin98@gmail.com', 'name' => 'Rong Marin'],
+    'from' => ['address' => env('MAIL_FROM_ADDRESS'), 'name' => env('MAIL_FROM_NAME')],
     'default' => env('MAIL_MAILER', 'smtp'),
 
     /*
@@ -83,10 +83,7 @@ return [
     |
     */
 
-    'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
-    ],
+  
 
     /*
     |--------------------------------------------------------------------------
