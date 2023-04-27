@@ -48,7 +48,8 @@ class Controller extends BaseController
         return 'data:image/' . $type . ';base64,' . base64_encode($data);
     }
 
-    public function basic_email() {
+    public function basic_email() 
+    {
         $data = array('name'=>"Rong Marin");
      
         Mail::send(['text'=>'emails.verification'], $data, function($message) {
@@ -56,30 +57,37 @@ class Controller extends BaseController
                     ->subject('Laravel Basic Testing Mail');
            $message->from('rongmarin98@gmail.com','Rong Marin');
         });
-        echo "Basic Email Sent. Check your inbox.";
-     }
-     public function html_email($user) {
+    }
+
+
+    public function html_email($user) 
+    {
+        $sender = array(
+            'email' => 'rongmarin98@gmail.com',
+            'username' => "Rong Marin"
+        );
         $data = array( 
             'name' => $user['username'],
             'email' => $user['email'],
             'user_id' => $user['user_id']
         );
-        Mail::send('emails.verification', $data, function($message) use ($user)  {
-           $message->to($user['email'], $user['username'])
+        Mail::send('emails.verification', $data, function($message) use ($user,$sender)  {
+            $message->to($user['email'], $user['username'])
                     ->subject('Welcome to RDev! Confirm Your E-mail.');
-           $message->from(env('MAIL_FROM_ADDRESS'),env('MAIL_USERNAME'));
+            $message->from($sender['email'],$sender['username']);
         });
-        echo "HTML Email Sent. Check your inbox.";
-     }
-     public function attachment_email() {
-        $data = array('name'=>"Virat Gandhi");
-        Mail::send('mail', $data, function($message) {
-           $message->to('abc@gmail.com', 'Tutorials Point')->subject
-              ('Laravel Testing Mail with Attachment');
-           $message->attach('C:\laravel-master\laravel\public\uploads\image.png');
-           $message->attach('C:\laravel-master\laravel\public\uploads\test.txt');
-           $message->from('xyz@gmail.com','Virat Gandhi');
-        });
-        echo "Email Sent with attachment. Check your inbox.";
-     }
+    }
+
+
+    public function attachment_email() {
+    $data = array('name'=>"Virat Gandhi");
+    Mail::send('mail', $data, function($message) {
+        $message->to('abc@gmail.com', 'Tutorials Point')->subject
+            ('Laravel Testing Mail with Attachment');
+        $message->attach('C:\laravel-master\laravel\public\uploads\image.png');
+        $message->attach('C:\laravel-master\laravel\public\uploads\test.txt');
+        $message->from('xyz@gmail.com','Virat Gandhi');
+    });
+    echo "Email Sent with attachment. Check your inbox.";
+    }
 }
