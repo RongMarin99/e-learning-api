@@ -26,15 +26,15 @@
         </p>
         <p>
             <b>
-                Let confirm your e-mail address.
+                Let reset your password.
             </b>
         </p>
         <br><br>
-        <p>By clicking on the following link, you are confirming your email address.</p>
+        <p>By clicking on the following link, you are reset your password.</p>
     </div>
     <center>
-       <a href="{{ route('user.verify', $user_id) }}">
-            <button class="confirm">Confirm Email Address</button>
+       <a href="{{ route('user.reset', $user_id) }}">
+            <button class="confirm">Reset New Password</button>
         </a> 
     </center>
     <div style="margin-left:150px">

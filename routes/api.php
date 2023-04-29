@@ -11,9 +11,11 @@ Route::get('/login',function(){
         'message' => 'Unauthorized'
     ]);
 })->name('login');
+
 Route::group(['middleware'=>'auth:api'], function(){
     include('auth/auth.php');
 });
 
+Route::post('/requestResetPassword',[AuthController::class, 'requestResetPassword']);
 
 

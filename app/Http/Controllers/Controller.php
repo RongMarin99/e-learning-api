@@ -13,9 +13,14 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public $username = "Rong Marin";
+    public $email = "rongmarin98@gmail.com";
+
     public function uploadImage($photo, $path = 'image_etec',$size1=350,$size2=350)
     {
         $photoName = null;
@@ -60,14 +65,14 @@ class Controller extends BaseController
     }
 
 
-    public function html_email($user) 
+    public function verify_email($user) 
     {
         $sender = array(
-            'email' => 'rongmarin98@gmail.com',
-            'username' => "Rong Marin"
+            'email' => $this->email,
+            'username' => $this->username
         );
         $data = array( 
-            'name' => $user['username'],
+            'username' => $user['username'],
             'email' => $user['email'],
             'user_id' => $user['user_id']
         );
@@ -76,8 +81,28 @@ class Controller extends BaseController
                     ->subject('Welcome to RDev! Confirm Your E-mail.');
             $message->from($sender['email'],$sender['username']);
         });
+        return 'Please Check Your Email';
     }
 
+    public function reset_password($user) 
+    {
+        $sender = array(
+            'email' => $this->email,
+            'username' => $this->username
+        );
+        $data = array( 
+            'username' => $user['username'],
+            'email' => $user['email'],
+            'user_id' => $user['id']
+        );
+        Mail::send('emails.reset-password', $data, function($message) use ($user,$sender)  {
+            $message->to($user['email'], $user['username'])
+                    ->subject('Welcome to RDev! Confirm Your E-mail.');
+            $message->from($sender['email'],$sender['username']);
+        });
+
+        return 'Please Check Your Email';
+    }
 
     public function attachment_email() {
     $data = array('name'=>"Virat Gandhi");

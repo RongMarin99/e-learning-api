@@ -10,10 +10,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
+use App\Models\Account_not_verify;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Contracts\Providers\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
@@ -64,7 +66,7 @@ class AuthController extends Controller
                 ]);
             }
         }else{
-            $register = User::create([
+            $register = Account_not_verify::create([
                 'fname' => $request->fname,
                 'lname' => $request->lname,
                 'username' => $request->username,
@@ -76,7 +78,7 @@ class AuthController extends Controller
                 'username' => $register->username,
                 'email' => $register->email
             ];
-            $this->html_email($user);
+            $this->verify_email($user);
         }
         return response()->json([
             'message' => 'Register Successfully.',
@@ -180,21 +182,54 @@ class AuthController extends Controller
 
     public function verifyAccount($id)
     {
-        $user = User::where('id', $id)->first();
-  
-        $message = 'Sorry your email cannot be identified.';
-  
+        $expire_date = Carbon::now()->subDays(2);
+        $user = Account_not_verify::where('id', $id)
+               ->whereDate('created_at','>=',$expire_date)
+               ->first();
+
         if(!is_null($user) ){
-            if(is_null($user->email_verified_at)) {
-                $user->email_verified_at = Carbon::now();
-                $user->save();
-                $message = "Your e-mail is verified. You can now login.";
-            } else {
-                $message = "Your e-mail is already verified. You can now login.";
+            $register = new User();
+            $register->fname = $user->fname;
+            $register->lname = $user->lname;
+            $register->username = $user->username;
+            $register->email = $user->email;
+            $register->email_verified_at = Carbon::now();
+            $register->password = $user->password;
+            $register->save();
+            if(!is_null($register->id)){
+                Account_not_verify::find($id)->delete();
             }
+            $message = "Your email is verified. You can now login.";
+            //$message = "Your e-mail is already verified. You can now login.";
+        }else {
+            $message = 'Sorry this link has been expired.';
         }
         return view("emails.confirm",[
             'message' => $message
         ]);
+    }
+
+    public function requestResetPassword(Request $request){
+        $email = $request['email'];
+        $Validator = Validator::make($request->all(),[
+            'email' => 'required'
+        ]);
+        if($Validator->fails()){
+            return response()->json([
+                'error' => $Validator->errors(),
+            ]);
+        }
+        $user = User::where('email',$email)
+                      ->whereNull('uid')
+                      ->first();
+        if(!is_null($user)){
+            $this->reset_password($user);
+        }
+    }
+
+    public function resetPassword(Request $request){
+
+        //redirect to front (reset new password)
+        return Redirect::to('http://google.com');
     }
 }
