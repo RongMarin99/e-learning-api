@@ -7,15 +7,16 @@ use App\Models\User;
 use App\Mail\SendMail;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\PasswordReset;
+use App\Models\Account_not_verify;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
-use App\Models\Account_not_verify;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Contracts\Providers\Auth;
-use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
@@ -216,20 +217,65 @@ class AuthController extends Controller
         ]);
         if($Validator->fails()){
             return response()->json([
+                'message' => 'The email field is required.',
                 'error' => $Validator->errors(),
+                'status' => false
             ]);
         }
         $user = User::where('email',$email)
                       ->whereNull('uid')
                       ->first();
         if(!is_null($user)){
-            $this->reset_password($user);
+            $token = Str::random(30);
+            DB::table('password_resets')
+            ->insert(
+                [
+                    'email' => $email, 
+                    'token' => $token,
+                    'created_at' => Carbon::now(),
+                    'user_id' =>$user['id']
+                ]
+            );
+            $this->reset_password($user,$token);
+            return response()->json([
+                'status' => true,
+                'message' => 'Please check your email address. '
+            ]);
         }
     }
 
-    public function resetPassword(Request $request){
-
+    public function resetPassword($token){
+        $reset_password_url = env('FRONT_END').'Reset-Password/'.$token;
         //redirect to front (reset new password)
-        return Redirect::to('http://google.com');
+        return Redirect::to($reset_password_url);
+    }
+
+    public function confirmResetPassword(Request $request){
+        $token = $request['token'];
+        $reset = PasswordReset::where('token',$token)->first();
+        if(!is_null($reset)){
+            $created_at = Carbon::parse($reset['created_at']);
+            $current = Carbon::now();
+            $expired_date = $current->diffInMinutes($created_at);
+            if($expired_date>60){
+                return response([
+                    'message' => 'This link has been expired!'
+                ]);
+            }else{
+                $data = $request['form'];
+                $user = User::find($reset['user_id']);
+                $user->password = Hash::make($data['new_password']);
+                if($user->save()){
+                    PasswordReset::where('user_id',$reset['user_id'])->delete();
+                    return response([
+                        'message' => 'Password has been changed!'
+                    ]);
+                }
+            }
+        }else{
+            return response([
+                'message' => 'Request url not found, Please check your email again!.'
+            ]);
+        }
     }
 }

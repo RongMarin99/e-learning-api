@@ -17,5 +17,5 @@ Route::group(['middleware'=>'auth:api'], function(){
 });
 
 Route::post('/requestResetPassword',[AuthController::class, 'requestResetPassword']);
-
+Route::post('/confirmResetPassword',[AuthController::class,'confirmResetPassword']);
 

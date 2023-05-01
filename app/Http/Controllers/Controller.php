@@ -84,7 +84,7 @@ class Controller extends BaseController
         return 'Please Check Your Email';
     }
 
-    public function reset_password($user) 
+    public function reset_password($user,$token) 
     {
         $sender = array(
             'email' => $this->email,
@@ -93,7 +93,8 @@ class Controller extends BaseController
         $data = array( 
             'username' => $user['username'],
             'email' => $user['email'],
-            'user_id' => $user['id']
+            'user_id' => $user['id'],
+            'token' => $token
         );
         Mail::send('emails.reset-password', $data, function($message) use ($user,$sender)  {
             $message->to($user['email'], $user['username'])

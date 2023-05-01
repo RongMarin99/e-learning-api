@@ -33,7 +33,7 @@
         <p>By clicking on the following link, you are reset your password.</p>
     </div>
     <center>
-       <a href="{{ route('user.reset', $user_id) }}">
+       <a href="{{ route('user.reset', $token) }}">
             <button class="confirm">Reset New Password</button>
         </a> 
     </center>

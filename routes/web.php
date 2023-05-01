@@ -17,7 +17,7 @@ use App\Http\Controllers\Auth\AuthController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('account/reset/{id}', [AuthController::class, 'resetPassword'])->name('user.reset'); 
+Route::get('account/reset/{token}', [AuthController::class, 'resetPassword'])->name('user.reset'); 
 
 Route::get('account/verify/{id}', [AuthController::class, 'verifyAccount'])->name('user.verify'); 
 //Route::post('account/verify', [AuthController::class, 'verifyAccount'])->name('user.verify'); 
