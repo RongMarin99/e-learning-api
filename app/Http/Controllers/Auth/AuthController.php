@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Mail\SendMail;
 use Illuminate\Support\Str;
+use App\Helper\Notification;
 use Illuminate\Http\Request;
 use App\Models\PasswordReset;
 use App\Models\Account_not_verify;
@@ -277,5 +278,9 @@ class AuthController extends Controller
                 'message' => 'Request url not found, Please check your email again!.'
             ]);
         }
+    }
+
+    public function pushNotification(Request $request){
+        Notification::send();
     }
 }
