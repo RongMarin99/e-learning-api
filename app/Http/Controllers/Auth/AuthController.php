@@ -281,6 +281,42 @@ class AuthController extends Controller
     }
 
     public function pushNotification(Request $request){
-        Notification::send();
+        //Notification::send();
+        $TOPIC_ADMIN = 'e-learning';
+        $data = [
+            'title' => 'Title from laravel',
+            'body' => 'body testing from laravel'
+        ];
+        $fields = array
+            (
+                'to'  => '/topics/'.$TOPIC_ADMIN,
+                'notification'          => $data
+            );
+        $headers = array
+            (
+                'Authorization: key=AAAAS5fmpX4:APA91bGWPsdApIRw8Ku6lwA33UhiqEDRXjbJKiWuU5XOSFE0l5wNxR0htMjDlvooNu3S2IKauapB2Co4UrG70oRkj8BtdCBJAA6mwA0EwO219QZ5N8559YcXd5CmTfv5ackrsT5uWcBk' ,
+                'Content-Type: application/json'
+            );
+        $ch = curl_init();
+        curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+        curl_setopt( $ch,CURLOPT_POST, true );
+        curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+        curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+        $result = curl_exec($ch );
+        // curl_close( $ch );
+        return json_encode($result, true);
+    }
+
+    public function updateRefreshToken(Request $request){
+        $this->validate($request, [
+            'token' => 'required',
+        ]);
+
+        $token = $request->input('token');
+        $TOPIC_ADMIN = 'e-learning';
+        Notification::subscribeToTopic($TOPIC_ADMIN,$token);
+        return response()->json(['success' => 1, 'message' => 'action successfully'], 200);
     }
 }

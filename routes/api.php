@@ -19,4 +19,4 @@ Route::group(['middleware'=>'auth:api'], function(){
 Route::post('/requestResetPassword',[AuthController::class, 'requestResetPassword']);
 Route::post('/confirmResetPassword',[AuthController::class,'confirmResetPassword']);
 Route::post('/push_notification',[AuthController::class,'pushNotification']);
-
+Route::post('/user/update_fcm_token',[AuthController::class,'updateRefreshToken']);
