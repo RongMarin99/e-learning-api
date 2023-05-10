@@ -27,7 +27,10 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
-
+    'SERVER_API_KEY' => env('SERVER_API_KEY'),
+    'SENDER_ID' => env('SENDER_ID'), 
+    'TOPIC_ADMIN' => env('TOPIC_ADMIN'),
+    'PROJECT_ID' => env('PROJECT_ID'),
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode

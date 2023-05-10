@@ -50,13 +50,11 @@ class AuthController extends Controller
         }
 
         if($request['social']==true){
-            $uid = User::where('uid',$request['uid'])
-                        ->orWhere('email',$request['email'])
-                        ->get();
-            if(count($uid)>0){
-                return response()->json([
-                    'message' => false,
-                ]);
+            $user = User::where('email',$request['email'])
+                        ->first();
+            if(!is_null($user)){
+                $token = auth()->login($user);
+                return $this->responseWithToken($token);
             }else{
                 $register = User::create([
                     'fname' => $request->fname,
@@ -64,23 +62,34 @@ class AuthController extends Controller
                     'uid' => $request->uid,
                     'photo' =>$request->photo,
                     'username' => $request->username,
+                    'email_verified_at' => Carbon::now(),
                     'email' => $request->email
                 ]);
             }
         }else{
-            $register = Account_not_verify::create([
-                'fname' => $request->fname,
-                'lname' => $request->lname,
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password)
-            ]);
-            $user = [
-                'user_id' => $register->id,
-                'username' => $register->username,
-                'email' => $register->email
-            ];
-            $this->verify_email($user);
+            $check = Account_not_verify::where('email',$request['email'])->first();
+            if(!is_null($check)){
+                return response(
+                    [
+                        'message' => 'This email has already register, please confirm your email adddres!.'
+                    ]
+                );
+            }else{
+                $register = Account_not_verify::create([
+                    'fname' => $request->fname,
+                    'lname' => $request->lname,
+                    'username' => $request->username,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password)
+                ]);
+                $user = [
+                    'user_id' => $register->id,
+                    'username' => $register->username,
+                    'email' => $register->email
+                ];
+                $this->verify_email($user);
+            }
+           
         }
         return response()->json([
             'message' => 'Register Successfully.',
@@ -315,7 +324,7 @@ class AuthController extends Controller
         ]);
 
         $token = $request->input('token');
-        $TOPIC_ADMIN = 'e-learning';
+        $TOPIC_ADMIN = $request->input('topic');
         Notification::subscribeToTopic($TOPIC_ADMIN,$token);
         return response()->json(['success' => 1, 'message' => 'action successfully'], 200);
     }

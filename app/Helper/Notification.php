@@ -55,9 +55,9 @@ class Notification{
         $url = $registrationToken . "/rel/topics/" . $topicName;
 
         $headers = [
-            'Authorization: key=AAAAS5fmpX4:APA91bGWPsdApIRw8Ku6lwA33UhiqEDRXjbJKiWuU5XOSFE0l5wNxR0htMjDlvooNu3S2IKauapB2Co4UrG70oRkj8BtdCBJAA6mwA0EwO219QZ5N8559YcXd5CmTfv5ackrsT5uWcBk',
+            'Authorization: key='.config('app.SERVER_API_KEY'),
             'Content-Type: application/json',
-            'project_id: 324671022462' 
+            'project_id: '.config('app.PROJECT_ID') 
         ];
 
         $ch = curl_init();
