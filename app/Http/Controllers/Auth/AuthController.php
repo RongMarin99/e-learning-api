@@ -144,7 +144,7 @@ class AuthController extends Controller
         ]);
     }
 
-    private function responseWithToken($token)
+    private function responseWithToken($token=null)
     {
         return response()->json([
             'access_token' => $token,
@@ -179,7 +179,12 @@ class AuthController extends Controller
         }
     }
 
-    public function getUser()
+    public function getUser(Request $request)
+    {
+        return $this->responseWithToken();
+    }
+
+    public function getCurrentUser()
     {
         return response()->json( auth()->user() );
     }

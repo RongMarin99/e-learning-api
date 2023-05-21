@@ -13,6 +13,7 @@ Route::get('/login',function(){
 })->name('login');
 
 Route::group(['middleware'=>'auth:api'], function(){
+    Route::post('getUser', [AuthController::class, 'getUser']);
     include('auth/auth.php');
 });
 
