@@ -149,7 +149,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
 			'user' => auth()->user(),
-            'expired_date' => auth()->factory()->getTTL()
+            'expired_date' => auth()->factory()->getTTL() * 1440
         ]);
     }
 
