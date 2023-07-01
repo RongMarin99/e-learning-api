@@ -21,6 +21,15 @@ class Controller extends BaseController
     public $username = "Rong Marin";
     public $email = "rongmarin98@gmail.com";
 
+    public function responseWithData($data = [])
+    {
+        return response()->json([
+            'data' => $data,
+            'success' => 1,
+            'message' => 'Your action has been completed successfully.'
+        ], 200);
+    }
+
     public function uploadImage($photo, $path = 'image_etec',$size1=350,$size2=350)
     {
         $photoName = null;
