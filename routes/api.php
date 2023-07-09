@@ -18,6 +18,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     include('auth/auth.php');
     include('auth/category.php');
+    include('auth/upload_file.php');
 });
 
 Route::post('/requestResetPassword', [AuthController::class, 'requestResetPassword']);

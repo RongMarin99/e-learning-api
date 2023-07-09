@@ -12,7 +12,8 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class Controller extends BaseController
 {
@@ -30,12 +31,21 @@ class Controller extends BaseController
         ], 200);
     }
 
-    public function uploadImage($photo, $path = 'image_etec',$size1=350,$size2=350)
+    public function uploadImages(Request $request){
+        $data = $request['images'];
+        $images = [];
+        foreach($data as $item){
+           $images[] = $this->uploadImage($item,'images/gallery');
+        }
+        return $images;
+    }
+
+    public function uploadImage($photo, $path = 'images',$size1=350,$size2=350)
     {
         $photoName = null;
         if (!empty($photo)) {
 
-            $path = public_path(DIRECTORY_SEPARATOR. $path);
+            $path = public_path( $path);
             if (!is_dir($path)) {
                 Storage::makeDirectory($path, 0777, true, true);
             }
@@ -44,9 +54,7 @@ class Controller extends BaseController
             $location = $path . DIRECTORY_SEPARATOR . $photoName;
             try {
                 $manager = new ImageManager();
-                $manager->make($photo)->resize($size1, $size2, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($location);
+                $manager->make($photo)->save($location);
             } catch (Exception $ex) {
                 DB::rollBack();
                 response()->json(['success' => 0, 'message' => 'Error while processing image.'], 500);
